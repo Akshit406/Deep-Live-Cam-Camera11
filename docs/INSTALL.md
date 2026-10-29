@@ -26,7 +26,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -Accelerat
 | `-SkipShortcut` | Avoid creating or changing the Desktop shortcut (useful for CI). |
 | `-Plan` | Print the installation plan without downloading or installing anything. |
 
-The source ZIP is pinned to v1.0.0. The private Python interpreter is installed under .runtime/; the environment is venv/. uv and downloads live under .installer/. A small installer-state.json records the selected backend and completion status. These files are ignored by Git.
+The source ZIP is pinned to v1.0.1. The private Python interpreter is installed under .runtime/; the environment is venv/. uv and downloads live under .installer/. A small installer-state.json records the selected backend and completion status. These files are ignored by Git.
 
 Downloads use HTTPS and SHA-256 checks from installer/assets.json. Existing verified models are reused; corrupt/incomplete downloads are replaced only after a verified download succeeds. Re-run the installer to resume after a network failure. Keep the install directory writable and avoid Program Files for the application itself.
 

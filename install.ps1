@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 [CmdletBinding()]
 param(
     [string]$InstallDir = '',
@@ -12,7 +12,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$release = 'v1.0.0'
+$release = 'v1.0.1'
 $repository = 'Akshit406/Deep-Live-Cam-Camera11'
 
 function Get-VerifiedFile([string]$Url, [string]$Destination, [string]$Sha256) {

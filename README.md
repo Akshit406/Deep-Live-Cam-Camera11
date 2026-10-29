@@ -25,10 +25,10 @@ A Windows edition of **[Deep-Live-Cam by hacksider and its contributors](https:/
 Open **Windows PowerShell** from the Start menu and paste:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.0/install.ps1')))
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.1/install.ps1')))
 ```
 
-The command installs release **v1.0.0** into `%LOCALAPPDATA%\DeepLiveCamCamera11`, creates a Desktop shortcut, and opens the app. Approve the Windows prompt to register the camera. Keep the terminal open until installation finishes; large downloads can take a while.
+The command installs release **v1.0.1** into `%LOCALAPPDATA%\DeepLiveCamCamera11`, creates a Desktop shortcut, and opens the app. Approve the Windows prompt to register the camera. Keep the terminal open until installation finishes; large downloads can take a while.
 
 The installer downloads a private Python 3.12.13 runtime, pinned Python packages, FFmpeg, and the model set used by this edition. It uses the bundled, source-built InsightFace wheel and Camera11 DLLs, so users do not have to compile C++ code. Bundled files and model/tool downloads are checked against SHA-256 hashes. See [the installer manifest](installer/assets.json) and [model license information](docs/MODELS.md).
 
@@ -37,20 +37,20 @@ The installer downloads a private Python 3.12.13 runtime, pinned Python packages
 To force CPU mode:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.0/install.ps1'))) -Acceleration Cpu
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.1/install.ps1'))) -Acceleration Cpu
 ```
 
 For a different destination:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.0/install.ps1'))) -InstallDir 'D:\Apps\DeepLiveCamera11'
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/Akshit406/Deep-Live-Cam-Camera11/v1.0.1/install.ps1'))) -InstallDir 'D:\Apps\DeepLiveCamera11'
 ```
 
 Review the [installer script](install.ps1) before running it, or use the downloaded-source steps below. Rerunning the same command resumes an interrupted install in the same release directory. For a different release, use a new directory; the installer does not overwrite an existing installation from another release.
 
 ## Install from the source ZIP or a Git clone
 
-1. Download the [v1.0.0 source ZIP](https://github.com/Akshit406/Deep-Live-Cam-Camera11/archive/refs/tags/v1.0.0.zip) and extract it to a writable folder, or clone the repository:
+1. Download the [v1.0.1 source ZIP](https://github.com/Akshit406/Deep-Live-Cam-Camera11/archive/refs/tags/v1.0.1.zip) and extract it to a writable folder, or clone the repository:
 
    ```powershell
    git clone https://github.com/Akshit406/Deep-Live-Cam-Camera11.git
