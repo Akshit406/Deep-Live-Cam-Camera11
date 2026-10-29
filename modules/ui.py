@@ -47,6 +47,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
     QSizePolicy,
     QSlider,
+    QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -75,6 +76,8 @@ from modules.utilities import (
 )
 from modules import imread_unicode
 from modules.video_capture import VideoCapturer
+from modules.virtual_camera import VirtualCamera, CAMERA_NAME
+from modules.photo_stream import PhotoStreamPanel
 
 if platform.system() == "Windows":
     from pygrabber.dshow_graph import FilterGraph
@@ -416,7 +419,8 @@ def get_available_cameras() -> Tuple[List[int], List[str]]:
             graph = FilterGraph()
             devices = graph.get_input_devices()
             if devices:
-                return list(range(len(devices))), devices
+                physical = [(i, name) for i, name in enumerate(devices) if name != CAMERA_NAME]
+                return ([i for i, _ in physical], [name for _, name in physical]) if physical else ([], ["No cameras found"])
             return [], ["No cameras found"]
         except Exception as exc:
             print(f"Error detecting cameras: {exc}")
@@ -492,20 +496,36 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(16, 16, 16, 16)
         layout.setSpacing(12)
 
-        # Source/Target row
-        layout.addLayout(self._build_image_row())
+        mode_row = QHBoxLayout()
+        mode_row.addWidget(QLabel("Mode"))
+        self.mode_selector = QComboBox()
+        self.mode_selector.addItems(["Mode 1 - Live face swap", "Mode 2 - Photo to Camera 11"])
+        mode_row.addWidget(self.mode_selector, 1)
+        layout.addLayout(mode_row)
 
-        # Options grid
-        layout.addWidget(self._build_options_card())
-
-        # Sliders card
-        layout.addWidget(self._build_sliders_card())
-
-        # Action buttons
-        layout.addLayout(self._build_action_row())
-
-        # Camera selection
-        layout.addWidget(self._build_camera_card())
+        self.mode_stack = QStackedWidget()
+        live_page = QWidget()
+        live_page.setObjectName("liveModePage")
+        live_page.setStyleSheet("QWidget#liveModePage { background-color: #1e1e1e; }")
+        live_layout = QVBoxLayout(live_page)
+        live_layout.setContentsMargins(0, 0, 0, 0)
+        live_layout.setSpacing(12)
+        live_layout.addLayout(self._build_image_row())
+        live_layout.addWidget(self._build_options_card())
+        live_layout.addWidget(self._build_sliders_card())
+        live_layout.addLayout(self._build_action_row())
+        live_layout.addWidget(self._build_camera_card())
+        live_scroll = QScrollArea()
+        live_scroll.setWidgetResizable(True)
+        live_scroll.setStyleSheet("QScrollArea { background-color: #1e1e1e; }")
+        live_scroll.setFrameShape(QScrollArea.Shape.NoFrame)
+        live_scroll.setWidget(live_page)
+        self.mode_stack.addWidget(live_scroll)
+        self.photo_panel = PhotoStreamPanel()
+        self.mode_stack.addWidget(self.photo_panel)
+        layout.addWidget(self.mode_stack, 1)
+        self.mode_selector.currentIndexChanged.connect(self._on_mode_changed)
+        QApplication.instance().aboutToQuit.connect(self._stop_camera_streams)
 
         # Status & footer
         self._status_label = QLabel("")
@@ -694,7 +714,7 @@ class MainWindow(QMainWindow):
         self.btn_destroy = QPushButton(_("Destroy"))
         self.btn_destroy.setObjectName("danger")
         self.btn_destroy.setToolTip(_("Stop processing and close the application"))
-        self.btn_destroy.clicked.connect(lambda: self._destroy_cb())
+        self.btn_destroy.clicked.connect(self.close)
 
         self.btn_preview = QPushButton(_("Preview"))
         self.btn_preview.setObjectName("secondary")
@@ -946,8 +966,20 @@ class MainWindow(QMainWindow):
             modules.globals.source_target_map = []
             _open_live_mapper_dialog(camera_index, modules.globals.source_target_map)
 
+    def _stop_camera_streams(self):
+        self.photo_panel.stop_stream()
+        if _WEBCAM_PREVIEW is not None:
+            _WEBCAM_PREVIEW.close()
+
+    def _on_mode_changed(self, index):
+        self._stop_camera_streams()
+        close_mapper_window()
+        self.mode_stack.setCurrentIndex(index)
+        self.set_status("")
+
     def closeEvent(self, event):
-        # Treat OS-level close as Destroy click
+        self._stop_camera_streams()
+        close_mapper_window()
         self._destroy_cb()
         event.accept()
 
@@ -1195,11 +1227,20 @@ class WebcamPreviewWindow(QWidget):
         self._image_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         layout.addWidget(self._image_label, 1)
 
+        self._virtual_camera = None
+        self._stop_event = threading.Event()
         self._cap = VideoCapturer(camera_index)
         if not self._cap.start(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT, 60):
             update_status("Failed to start camera")
             QTimer.singleShot(0, self.close)
             return
+
+        if platform.system() == "Windows":
+            try:
+                self._virtual_camera = VirtualCamera()
+                update_status(f"Virtual camera ready: {CAMERA_NAME}")
+            except Exception as exc:
+                update_status(f"Virtual camera unavailable: {exc}")
 
         camera_fps = self._cap.actual_fps
         print(
@@ -1234,6 +1275,13 @@ class WebcamPreviewWindow(QWidget):
             bgr_frame = self._processed_queue.get_nowait()
         except queue.Empty:
             return
+        if self._virtual_camera is not None:
+            try:
+                self._virtual_camera.send(bgr_frame)
+            except Exception as exc:
+                self._virtual_camera.close()
+                self._virtual_camera = None
+                update_status(f"Virtual camera stopped: {exc}")
         bgr_frame = fit_image_to_size(bgr_frame, self.width(), self.height())
         self._image_label.setPixmap(_bgr_to_qpixmap(bgr_frame))
 
@@ -1243,7 +1291,10 @@ class WebcamPreviewWindow(QWidget):
             self._timer.stop()
         except Exception:
             pass
-        for worker in (self._capture_worker, self._processing_worker):
+        if self._virtual_camera is not None:
+            self._virtual_camera.close()
+            self._virtual_camera = None
+        for worker in (getattr(self, "_capture_worker", None), getattr(self, "_processing_worker", None)):
             try:
                 worker.wait(2000)
             except Exception:

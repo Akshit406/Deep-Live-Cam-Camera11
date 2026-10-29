@@ -1,0 +1,84 @@
+{
+  "python": "3.12.13",
+  "release": "v1.0.0",
+  "uv": {
+    "url": "https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-pc-windows-msvc.zip",
+    "sha256": "a2a8820d5eea32f08ef467ef3b7f66883a9b076d5737a2fc2fbb5f458d1bb50f"
+  },
+  "models": [
+    {
+      "name": "inswapper_128_fp16.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/inswapper_128_fp16.onnx",
+      "sha256": "6d51a9278a1f650cffefc18ba53f38bf2769bf4bbff89267822cf72945f8a38b",
+      "bytes": 277680638,
+      "destination": "models"
+    },
+    {
+      "name": "gfpgan-1024.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/gfpgan-1024.onnx",
+      "sha256": "ee8dd6415e388b3a410689d5d9395a2bf50b5973b588421ebfa57bc266f19e24",
+      "bytes": 365875079,
+      "destination": "models"
+    },
+    {
+      "name": "GPEN-BFR-256.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/GPEN-BFR-256.onnx",
+      "sha256": "aa5bd3ab238640a378c59e4a560f7a7150627944cf2129e6311ae4720e833271",
+      "bytes": 75715262,
+      "destination": "models"
+    },
+    {
+      "name": "GPEN-BFR-512.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/GPEN-BFR-512.onnx",
+      "sha256": "bf80acb8e91ba8852e3f012505be2c3b6cd6b3eed5ec605e3db87863c4e74d4e",
+      "bytes": 284244491,
+      "destination": "models"
+    },
+    {
+      "name": "buffalo_l/buffalo_l/1k3d68.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/buffalo_l/buffalo_l/1k3d68.onnx",
+      "sha256": "df5c06b8a0c12e422b2ed8947b8869faa4105387f199c477af038aa01f9a45cc",
+      "bytes": 143607619,
+      "destination": "insightface"
+    },
+    {
+      "name": "buffalo_l/buffalo_l/2d106det.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/buffalo_l/buffalo_l/2d106det.onnx",
+      "sha256": "f001b856447c413801ef5c42091ed0cd516fcd21f2d6b79635b1e733a7109dbf",
+      "bytes": 5030888,
+      "destination": "insightface"
+    },
+    {
+      "name": "buffalo_l/buffalo_l/det_10g.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/buffalo_l/buffalo_l/det_10g.onnx",
+      "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+      "bytes": 16923827,
+      "destination": "insightface"
+    },
+    {
+      "name": "buffalo_l/buffalo_l/genderage.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/buffalo_l/buffalo_l/genderage.onnx",
+      "sha256": "4fde69b1c810857b88c64a335084f1c3fe8f01246c9a191b48c7bb756d6652fb",
+      "bytes": 1322532,
+      "destination": "insightface"
+    },
+    {
+      "name": "buffalo_l/buffalo_l/w600k_r50.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/581e70b61240b7928404c17900437f47cfe94133/buffalo_l/buffalo_l/w600k_r50.onnx",
+      "sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "bytes": 174383860,
+      "destination": "insightface"
+    }
+  ],
+  "files": {
+    "installer/wheels/insightface-0.7.3-cp312-cp312-win_amd64.whl": "ae5e7e69a5aa10805142092372fa4910294680d58b344b86fbab8822c0038b70",
+    "installer/sources/insightface-0.7.3.tar.gz": "f191f719612ebb37018f41936814500544cd0f86e6fcd676c023f354c668ddf7",
+    "virtual-camera/bin/deeplive-camera11-x64.dll": "0dd0cd9f1af9e174f4e5258e2b3fc1fa859a62f8078e7e9e918220e3a2bcb3e3",
+    "virtual-camera/bin/deeplive-camera11-x86.dll": "13cf38c6971bdaa39c1bfe0f24f23ec5dc9dd6b81e9237a94628098ee87cd01f"
+  },
+  "ffmpeg": {
+    "url": "https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-essentials_build.zip",
+    "sha256": "60f467265b1e312373dbcd92200c2618a74850f98d3d078e94296bb3fa2047ba",
+    "version": "9.0.2"
+  }
+}

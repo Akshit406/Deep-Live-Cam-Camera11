@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.28)
+project(DeepLiveCamera11 LANGUAGES C CXX)
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
+set(D vendor/libdshowcapture/source)
+add_library(deeplive-camera11 SHARED
+src/virtualcam-filter.cpp src/virtualcam-module.cpp src/placeholder.cpp src/sleepto.c
+src/shared-memory-queue.c src/tiny-nv12-scale.c src/publisher.cpp
+${D}/output-filter.cpp ${D}/dshow-base.cpp ${D}/dshow-enum.cpp ${D}/dshow-formats.cpp ${D}/dshow-media-type.cpp ${D}/log.cpp)
+target_include_directories(deeplive-camera11 PRIVATE src vendor/libdshowcapture vendor/obs/libobs)
+target_compile_definitions(deeplive-camera11 PRIVATE UNICODE _UNICODE _CRT_SECURE_NO_WARNINGS)
+target_link_libraries(deeplive-camera11 PRIVATE strmiids ole32 oleaut32 advapi32 shell32 winmm setupapi cfgmgr32 ksuser wmcodecdspuuid)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+set(ARCH x64)
+else()
+set(ARCH x86)
+endif()
+set_target_properties(deeplive-camera11 PROPERTIES OUTPUT_NAME "deeplive-camera11-${ARCH}")
+target_sources(deeplive-camera11 PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/exports-${ARCH}.def")

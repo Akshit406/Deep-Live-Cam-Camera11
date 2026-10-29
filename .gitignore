@@ -29,3 +29,40 @@ switch_states.json
 install.bat
 /.claude
 *.bat
+
+# Local runtimes, downloads, build output, and personal media/settings.
+/.runtime/
+/.setup/
+/.cache/
+/.install-test/
+/.release/
+/installer-state.json
+/.installer/
+/virtual-camera/build-*/
+/virtual-camera/system-install-status.json
+/virtual-camera/vendor/libdshowcapture/.git/
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.jpg
+*.jpeg
+*.webp
+*.bmp
+*.tif
+*.tiff
+*.exe
+*.zip
+*.7z
+*.whl
+*.tar.gz
+*.dll
+!/installer/wheels/*.whl
+!/installer/sources/insightface-0.7.3.tar.gz
+!/virtual-camera/bin/*.dll
+!/Start Deep Live Cam.bat
+!/Start Deep Live Cam (CPU).bat
+!/Install Camera11.bat
+!/Uninstall Camera11.bat
+!/Install.bat

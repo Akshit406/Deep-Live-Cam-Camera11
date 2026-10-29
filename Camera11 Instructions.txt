@@ -1,0 +1,69 @@
+Camera11 for Deep-Live-Cam
+
+Device name: USB2.0 HD UVC WebCam (2b7e:b685)11
+
+MODE 1 - Live face swap
+
+1. Close and reopen Deep-Live-Cam using Start Deep Live Cam.bat.
+2. Select the replacement face image and your physical USB webcam.
+3. Click Live. The processed video is automatically sent to Camera11.
+4. In your browser or video-call application, select:
+   USB2.0 HD UVC WebCam (2b7e:b685)11
+5. Select your normal microphone separately; this camera supplies video only.
+
+OBS does not need to run. Restart the receiving application if the new camera
+is missing from its list. Keep the Live Preview open while using the camera.
+Closing Live Preview stops output; receiving apps get black frames.
+
+MODE 2 - Stream a photo from your gallery
+
+1. Open Start Deep Live Cam.bat and select Mode 2 - Photo to Camera 11
+   from the Mode menu at the top.
+2. Click Select image from gallery and choose your photo.
+3. Click Start streaming.
+4. In the calling app, select USB2.0 HD UVC WebCam (2b7e:b685)11.
+5. Keep Deep-Live-Cam open; it can be minimized.
+
+Select another image to change the photo while streaming.
+Drag the photo in the preview to move it. Drag any corner handle or use the
+mouse wheel to resize it, preserving its proportions. Uncovered areas are
+black. Changes are applied live to Camera11. Fit / Center image resets the
+size and position. The outlined 16:9 canvas shows the camera output; editor
+handles are not streamed. Parts of the image outside the canvas are cropped.
+Mode 2 streams a still photo; it does not animate it or open your webcam.
+Stop streaming, switching modes, or closing the app stops the stream.
+Click Start streaming again after returning to Mode 2.
+
+The virtual camera sends a 1280x720, 30 fps video stream. Slower face processing
+repeats the most recent processed frame; it does not generate extra detail or
+make GPEN run faster. Other aspect ratios are fitted with black borders.
+
+The camera is registered system-wide for 32-bit and 64-bit applications. Its
+driver DLLs are installed in C:\Program Files\DeepLiveCamera11. Deep-Live-Cam
+also uses the publisher DLL in virtual-camera\bin, so keep this project folder.
+Install Camera11.bat reinstalls registration with Windows administrator approval.
+Uninstall Camera11.bat removes only this camera's registration with the same
+approval. Existing physical cameras and OBS are retained.
+
+Compatibility: Windows desktop applications supporting DirectShow cameras.
+Some apps that require hardware cameras or only Media Foundation sources may
+not support this device. This is a software virtual camera with its own device
+identity, not a replacement for the physical USB camera's driver.
+
+Implementation and license notes:
+The standalone driver adapts the GPL OBS Studio 32.0.4 virtual-camera filter
+and LGPL libdshowcapture components, with a new CLSID, private video channel,
+custom name, Python publisher, and direct Deep-Live-Cam integration. It does
+not depend on an installed or running OBS application. Original source and
+licenses are retained in virtual-camera\vendor, modifications in
+virtual-camera\src, and pinned source references in virtual-camera\upstream.json.
+Source URLs:
+https://github.com/obsproject/obs-studio/tree/32.0.4/plugins/win-dshow
+https://github.com/obsproject/libdshowcapture
+
+Verification: virtual-camera\verification.log and integration-verification.log.
+Tests use synthetic color frames; they do not record the physical webcam.
+
+SunBrowser: after installing or repairing the camera, stop and reopen the
+SunBrowser profile from AdsPower, then reopen the calling site and its camera
+selector. Reloading only the website may retain an old device list.

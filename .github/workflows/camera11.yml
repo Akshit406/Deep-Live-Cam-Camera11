@@ -1,0 +1,41 @@
+name: Camera11 checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p 'test_*.py'
+
+  windows-install:
+    runs-on: windows-2022
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CPU runtime without camera registration or models
+        shell: powershell
+        run: .\install.ps1 -Acceleration Cpu -SkipCamera -SkipModels -SkipLaunch -SkipShortcut
+      - name: Verify runtime
+        shell: powershell
+        run: .\venv\Scripts\python.exe installer\check_install.py --backend cpu
+
+  camera-source-build:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build both camera architectures from the published source
+        shell: powershell
+        run: .\virtual-camera\build.ps1

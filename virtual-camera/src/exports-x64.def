@@ -1,0 +1,9 @@
+EXPORTS
+DllCanUnloadNow
+DllGetClassObject
+DllRegisterServer
+DllUnregisterServer
+DllInstall
+dlc_create
+dlc_write
+dlc_close
